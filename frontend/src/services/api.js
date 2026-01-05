@@ -1,15 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "/api", // 👈 VERY IMPORTANT
-});
-
-API.interceptors.request.use((req) => {
-  const token = localStorage.getItem("adminToken");
-  if (token) {
-    req.headers.Authorization = `Bearer ${token}`;
-  }
-  return req;
+  baseURL: import.meta.env.VITE_API_URL
 });
 
 export default API;
