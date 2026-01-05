@@ -19,17 +19,23 @@ const upload = multer({ storage });
  * ADD PRODUCT (ADMIN ONLY)
  */
 router.post("/", auth, upload.single("image"), async (req, res) => {
-  const product = new Product({
-    name: req.body.name,
-    price: req.body.price,
-    category: req.body.category,
-    description: req.body.description,
-    image: req.file.filename
-  });
+  try {
+    const product = new Product({
+      name: req.body.name,
+      price: req.body.price,
+      category: req.body.category,
+      description: req.body.description,
+      image: req.file ? req.file.filename : null
+    });
 
-  await product.save();
-  res.json(product);
+    await product.save();
+    res.json(product);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Product upload failed" });
+  }
 });
+
 
 /**
  * GET ALL PRODUCTS (PUBLIC)
