@@ -1,10 +1,10 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://dream-gadgets-1.onrender.com/api"
+  baseURL: import.meta.env.VITE_API_URL
 });
 
-// attach token
+// 🔥 THIS IS THE MOST IMPORTANT PART
 API.interceptors.request.use((req) => {
   const token = localStorage.getItem("adminToken");
   if (token) {

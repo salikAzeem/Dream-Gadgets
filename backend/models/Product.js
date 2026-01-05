@@ -1,10 +1,11 @@
-import API from "../services/api";
+const mongoose = require("mongoose");
 
-const formData = new FormData();
-formData.append("name", name);
-formData.append("price", price);
-formData.append("category", category);
-formData.append("description", description);
-formData.append("image", image);
+const productSchema = new mongoose.Schema({
+  name: String,
+  price: Number,
+  category: String,
+  description: String,
+  image: String
+}, { timestamps: true });
 
-await API.post("/products", formData);
+module.exports = mongoose.model("Product", productSchema);
