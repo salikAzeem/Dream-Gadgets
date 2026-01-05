@@ -6,33 +6,30 @@ require("dotenv").config();
 
 const app = express();
 
-// Middleware
+// Middlewares
 app.use(cors());
 app.use(express.json());
-app.use("/uploads", express.static("uploads"));
 
 // MongoDB
-mongoose.connect(process.env.MONGO_URI)
+mongoose
+  .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected"))
   .catch(err => console.log(err));
 
-// API Routes
+// API routes
 app.use("/api/admin", require("./routes/adminRoutes"));
 app.use("/api/products", require("./routes/productRoutes"));
 app.use("/api/orders", require("./routes/orderRoutes"));
 
-/* ===============================
-   SERVE FRONTEND (VITE BUILD)
-================================ */
+// Serve frontend
+const frontendPath = path.join(__dirname, "public", "dist");
+app.use(express.static(frontendPath));
 
-// Serve static assets
-app.use(express.static(path.join(__dirname, "public/dist")));
-
-// Serve React app (NO wildcard '*')
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public/dist", "index.html"));
+// IMPORTANT: React Router fallback
+app.get(/.*/, (req, res) => {
+  res.sendFile(path.join(frontendPath, "index.html"));
 });
 
-// Port
+// Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on ${PORT}`));
