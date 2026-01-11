@@ -9,6 +9,7 @@ export default function ProductCard({ product }) {
   src={`${import.meta.env.VITE_API_URL.replace("/api", "")}/uploads/${product.image}`}
   alt={product.name}
 
+
   style={{
     width: "100%",
     height: "180px",          // 🔴 FIXED HEIGHT
