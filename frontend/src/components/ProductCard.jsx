@@ -6,10 +6,8 @@ export default function ProductCard({ product }) {
   return (
     <div className="bg-white rounded shadow hover:shadow-lg transition p-3">
       <img
-  src={`${import.meta.env.VITE_API_URL.replace("/api", "")}/uploads/${product.image}`}
+  src={`https://dream-gadgets-1.onrender.com/uploads/${product.image}`}
   alt={product.name}
-
-
   style={{
     width: "100%",
     height: "180px",          // 🔴 FIXED HEIGHT
