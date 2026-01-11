@@ -25,7 +25,10 @@ router.post("/", auth, upload.single("image"), async (req, res) => {
       price: req.body.price,
       category: req.body.category,
       description: req.body.description,
-      image: req.file ? `/uploads/${req.file.filename}` : null
+      image: req.file
+  ? `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`
+  : null
+
     });
 
     await product.save();
