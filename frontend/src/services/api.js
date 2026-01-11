@@ -1,8 +1,9 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL
+  baseURL: "https://dream-gadgets-1.onrender.com/api",
 });
+
 
 // 🔥 THIS IS THE MOST IMPORTANT PART
 API.interceptors.request.use((req) => {
