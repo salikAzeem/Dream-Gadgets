@@ -25,7 +25,7 @@ router.post("/", auth, upload.single("image"), async (req, res) => {
       price: req.body.price,
       category: req.body.category,
       description: req.body.description,
-      image: req.file ? req.file.filename : null
+      image: req.file ? `/uploads/${req.file.filename}` : null
     });
 
     await product.save();
@@ -35,7 +35,6 @@ router.post("/", auth, upload.single("image"), async (req, res) => {
     res.status(500).json({ message: "Product upload failed" });
   }
 });
-
 
 /**
  * GET ALL PRODUCTS (PUBLIC)
