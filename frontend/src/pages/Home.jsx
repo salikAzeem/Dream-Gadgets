@@ -8,10 +8,13 @@ export default function Home() {
 
   const categories = [
     "All",
+    "Phone",
     "Phone Cover",
     "Earbuds",
-    "Watch",
-    "Accessories",
+    "Smart Watch",
+    "Charger",
+    "Cable",
+    "Screen Guard",
   ];
 
   const [selectedCategory, setSelectedCategory] = useState("All");
