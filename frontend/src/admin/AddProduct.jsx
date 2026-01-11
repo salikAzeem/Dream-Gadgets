@@ -2,13 +2,6 @@
 import { useState } from "react";
 import API from "../services/api";
 
-useEffect(() => {
-  const token = localStorage.getItem("adminToken");
-  if (!token) {
-    alert("Please login as admin");
-    navigate("/admin/login");
-  }
-}, []);
 
 export default function AddProduct() {
   const [data, setData] = useState({});
