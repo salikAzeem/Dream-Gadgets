@@ -2,18 +2,21 @@ const express = require("express");
 const multer = require("multer");
 const Product = require("../models/Product");
 const auth = require("../middleware/authMiddleware");
-
+const cloudinary = require("../cloudinary");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const router = express.Router();
 
 // Image upload config
-const storage = multer.diskStorage({
-  destination: "uploads/",
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname);
-  }
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "dream-gadgets",
+    allowed_formats: ["jpg", "jpeg", "png"],
+  },
 });
 
 const upload = multer({ storage });
+
 
 /**
  * ADD PRODUCT (ADMIN ONLY)
@@ -25,9 +28,7 @@ router.post("/", auth, upload.single("image"), async (req, res) => {
       price: req.body.price,
       category: req.body.category,
       description: req.body.description,
-      image: req.file
-  ? `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`
-  : null
+      image: req.file ? req.file.path : null
 
     });
 
