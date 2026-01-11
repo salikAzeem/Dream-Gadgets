@@ -3,23 +3,32 @@ import { useCart } from "../context/CartContext";
 export default function ProductCard({ product }) {
   const { addToCart } = useCart();
 
+  // 🔹 Handle BOTH old & new image formats safely
+  const isCloudinary =
+    product.image && product.image.startsWith("http");
+
+  const imageSrc = isCloudinary
+    ? product.image
+    : product.image
+    ? `${import.meta.env.VITE_API_URL.replace("/api", "")}/uploads/${product.image}`
+    : "/no-image.png";
+
   return (
     <div className="bg-white rounded shadow hover:shadow-lg transition p-3">
       <img
-  src={product.image || "/no-image.png"}
-  alt={product.name}
+        src={imageSrc}
+        alt={product.name}
+        onError={(e) => (e.target.src = "/no-image.png")}
+        style={{
+          width: "100%",
+          height: "180px",
+          objectFit: "contain",
+          backgroundColor: "#fff",
+          padding: "10px",
+        }}
+      />
 
-  style={{
-    width: "100%",
-    height: "180px",          // 🔴 FIXED HEIGHT
-    objectFit: "contain",     // 🔴 NO STRETCH
-    backgroundColor: "#fff",  // clean background
-    padding: "10px"
-  }}
-/>
-
-
-      <h3 className="font-semibold text-sm line-clamp-2">
+      <h3 className="font-semibold text-sm line-clamp-2 mt-2">
         {product.name}
       </h3>
 
