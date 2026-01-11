@@ -67,58 +67,58 @@ export default function AddProduct() {
   };
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
+    <div className="p-4 sm:p-6 bg-gray-100 min-h-screen">
       <h2 className="text-2xl font-bold mb-6 text-gray-800">
         ➕ Add New Product
       </h2>
 
-      {/* TABLE STYLE FORM */}
-      <div className="bg-white rounded-lg shadow-lg overflow-hidden max-w-4xl">
-        <table className="w-full text-sm">
-          <tbody>
-            {/* Name */}
-            <tr className="border-b">
-              <td className="p-4 font-semibold bg-gray-50 w-1/4">
+      {/* FORM CONTAINER */}
+      <div className="bg-white rounded-lg shadow-lg w-full max-w-8xl mx-auto">
+        <table className="w-full text-base">
+          <tbody className="divide-y">
+            {/* Product Name */}
+            <tr>
+              <td className="p-4 sm:p-6 font-semibold bg-gray-50 w-full sm:w-1/4">
                 Product Name
               </td>
-              <td className="p-4">
+              <td className="p-4 sm:p-6">
                 <input
                   name="name"
                   value={data.name}
                   onChange={handleChange}
-                  className="border p-2 w-full rounded focus:ring-2 focus:ring-yellow-400 outline-none"
+                  className="border p-3 w-full rounded focus:ring-2 focus:ring-yellow-400 outline-none"
                   placeholder="iPhone 15 Cover"
                 />
               </td>
             </tr>
 
             {/* Price */}
-            <tr className="border-b">
-              <td className="p-4 font-semibold bg-gray-50">
+            <tr>
+              <td className="p-4 sm:p-6 font-semibold bg-gray-50">
                 Price (₹)
               </td>
-              <td className="p-4">
+              <td className="p-4 sm:p-6">
                 <input
                   name="price"
                   value={data.price}
                   onChange={handleChange}
-                  className="border p-2 w-full rounded focus:ring-2 focus:ring-yellow-400 outline-none"
+                  className="border p-3 w-full rounded focus:ring-2 focus:ring-yellow-400 outline-none"
                   placeholder="499"
                 />
               </td>
             </tr>
 
             {/* Category */}
-            <tr className="border-b">
-              <td className="p-4 font-semibold bg-gray-50">
+            <tr>
+              <td className="p-4 sm:p-6 font-semibold bg-gray-50">
                 Category
               </td>
-              <td className="p-4">
+              <td className="p-4 sm:p-6">
                 <select
                   name="category"
                   value={data.category}
                   onChange={handleChange}
-                  className="border p-2 w-full rounded focus:ring-2 focus:ring-yellow-400 outline-none"
+                  className="border p-3 w-full rounded focus:ring-2 focus:ring-yellow-400 outline-none"
                 >
                   <option value="">Select Category</option>
                   {CATEGORIES.map((cat) => (
@@ -131,17 +131,17 @@ export default function AddProduct() {
             </tr>
 
             {/* Description */}
-            <tr className="border-b">
-              <td className="p-4 font-semibold bg-gray-50">
+            <tr>
+              <td className="p-4 sm:p-6 font-semibold bg-gray-50">
                 Description
               </td>
-              <td className="p-4">
+              <td className="p-4 sm:p-6">
                 <textarea
                   name="description"
                   value={data.description}
                   onChange={handleChange}
-                  rows={3}
-                  className="border p-2 w-full rounded focus:ring-2 focus:ring-yellow-400 outline-none"
+                  rows={4}
+                  className="border p-3 w-full rounded focus:ring-2 focus:ring-yellow-400 outline-none"
                   placeholder="Premium silicone cover with shock protection"
                 />
               </td>
@@ -149,21 +149,22 @@ export default function AddProduct() {
 
             {/* Image */}
             <tr>
-              <td className="p-4 font-semibold bg-gray-50">
+              <td className="p-4 sm:p-6 font-semibold bg-gray-50">
                 Product Image
               </td>
-              <td className="p-4">
+              <td className="p-4 sm:p-6">
                 <input
                   type="file"
                   accept="image/*"
                   onChange={handleImage}
+                  className="mb-4"
                 />
 
                 {preview && (
                   <img
                     src={preview}
                     alt="Preview"
-                    className="mt-4 w-32 h-32 object-contain border rounded"
+                    className="w-40 h-40 object-contain border rounded"
                   />
                 )}
               </td>
@@ -172,11 +173,11 @@ export default function AddProduct() {
         </table>
 
         {/* FOOTER */}
-        <div className="p-4 bg-gray-50 flex justify-end">
+        <div className="p-4 sm:p-6 bg-gray-50 flex justify-end">
           <button
             onClick={submit}
             disabled={loading}
-            className={`px-6 py-2 rounded font-semibold transition ${
+            className={`px-8 py-3 rounded font-semibold text-lg transition ${
               loading
                 ? "bg-gray-400 cursor-not-allowed"
                 : "bg-yellow-400 hover:bg-yellow-500 text-black"
