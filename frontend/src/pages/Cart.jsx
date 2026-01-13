@@ -93,7 +93,7 @@ export default function Cart() {
                           src={imageSrc}
                           alt={p.name}
                           onError={(e) => (e.target.src = "/no-image.png")}
-                          style={{ width: "100%", height: "100%", objectFit: "contain" }}
+                          style={{ width: "20%", height: "20%", objectFit: "contain" }}
                         />
                       </div>
 
