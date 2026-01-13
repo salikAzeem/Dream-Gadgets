@@ -1,0 +1,62 @@
+/* ================================
+   PRODUCT DETAIL RESPONSIVE
+================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .pd-main {
+    grid-template-columns: 1fr !important;
+  }
+
+  .pd-features {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .pd-page {
+    padding-bottom: 80px;
+  }
+
+  .pd-image {
+    padding: 20px !important;
+  }
+
+  .pd-image img {
+    width: 90% !important;
+    height: auto !important;
+  }
+
+  .pd-info {
+    padding: 24px !important;
+  }
+
+  .pd-info h1 {
+    font-size: 24px !important;
+  }
+
+  .pd-features {
+    grid-template-columns: 1fr !important;
+  }
+
+  .pd-actions {
+    grid-template-columns: 1fr !important;
+  }
+
+  .pd-reviews {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+  .pd-info h1 {
+    font-size: 20px !important;
+  }
+
+  .pd-info span,
+  .pd-info p {
+    font-size: 14px !important;
+  }
+}

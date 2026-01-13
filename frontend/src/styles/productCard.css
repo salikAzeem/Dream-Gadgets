@@ -1,0 +1,60 @@
+/* ==============================
+   PRODUCT CARD RESPONSIVENESS
+============================== */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .pc-title {
+    font-size: 14px !important;
+  }
+
+  .pc-price p {
+    font-size: 18px !important;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .pc-card {
+    transform: none !important;
+  }
+
+  .pc-image-container {
+    padding: 20px 14px !important;
+  }
+
+  .pc-content {
+    padding: 16px !important;
+  }
+
+  .pc-title {
+    font-size: 14px !important;
+    min-height: auto !important;
+  }
+
+  .pc-features {
+    display: none !important;
+  }
+
+  .pc-button {
+    font-size: 14px !important;
+    padding: 12px !important;
+  }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+  .pc-title {
+    font-size: 13px !important;
+  }
+
+  .pc-price {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 6px;
+  }
+
+  .pc-button {
+    padding: 10px !important;
+  }
+}

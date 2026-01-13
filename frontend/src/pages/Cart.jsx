@@ -1,8 +1,17 @@
 import { useCart } from "../context/CartContext";
 import { Link } from "react-router-dom";
-import { ShoppingBag, Trash2, ArrowLeft, MessageCircle, Tag, TrendingUp, Package } from "lucide-react";
+import {
+  ShoppingBag,
+  Trash2,
+  ArrowLeft,
+  MessageCircle,
+  Tag,
+  TrendingUp,
+  Package,
+} from "lucide-react";
 import Navbar from "../components/Navbar";
 import API from "../services/api";
+import "../styles/cart.css";
 
 export default function Cart() {
   const { cart, removeFromCart, totalPrice } = useCart();
@@ -29,14 +38,16 @@ export default function Cart() {
     message += `\n💰 *Total: ₹${totalPrice}*\n`;
     message += "\n📍 Please confirm availability & payment.";
 
-    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-    window.open(url, "_blank");
+    window.open(
+      `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`,
+      "_blank"
+    );
   };
 
   const savings = Math.floor(totalPrice * 0.23);
 
   return (
-    <div style={styles.page}>
+    <div style={styles.page} className="cart-page">
       <Navbar />
 
       <div style={styles.container}>
@@ -47,7 +58,8 @@ export default function Cart() {
           </Link>
         </div>
 
-        <div style={styles.content}>
+        <div style={styles.content} className="cart-content">
+          {/* LEFT */}
           <div style={styles.leftColumn}>
             <div style={styles.cartHeader}>
               <div style={styles.headerLeft}>
@@ -55,10 +67,12 @@ export default function Cart() {
                 <div>
                   <h2 style={styles.cartTitle}>Shopping Cart</h2>
                   <p style={styles.cartSubtitle}>
-                    {cart.length} {cart.length === 1 ? "item" : "items"} in your cart
+                    {cart.length}{" "}
+                    {cart.length === 1 ? "item" : "items"} in your cart
                   </p>
                 </div>
               </div>
+
               {cart.length > 0 && (
                 <div style={styles.savingsBadge}>
                   <TrendingUp size={16} />
@@ -69,47 +83,45 @@ export default function Cart() {
 
             {cart.length === 0 ? (
               <div style={styles.emptyCart}>
-                <div style={styles.emptyIcon}>
-                  <ShoppingBag size={80} />
-                </div>
+                <ShoppingBag size={80} style={styles.emptyIcon} />
                 <h3 style={styles.emptyTitle}>Your cart is empty</h3>
                 <p style={styles.emptyText}>
-                  Add some amazing products to your cart and make your day special!
+                  Add some amazing products to your cart
                 </p>
                 <Link to="/" style={styles.shopButton}>
-                  <Package size={20} />
-                  <span>Start Shopping</span>
+                  <Package size={20} /> Start Shopping
                 </Link>
               </div>
             ) : (
-              <div style={styles.cartItems}>
+              <div style={styles.cartItems} className="cart-items">
                 {cart.map((p) => {
                   const imageSrc =
                     p.image && p.image.startsWith("http")
                       ? p.image
                       : p.image
-                      ? `${import.meta.env.VITE_API_URL.replace("/api", "")}/uploads/${p.image}`
+                      ? `${
+                          import.meta.env.VITE_API_URL.replace("/api", "")
+                        }/uploads/${p.image}`
                       : "/no-image.png";
 
                   return (
-                    <div key={p._id} style={styles.cartItem}>
+                    <div
+                      key={p._id}
+                      style={styles.cartItem}
+                      className="cart-item"
+                    >
                       <div style={styles.itemImage}>
-                        <img
-                          src={imageSrc}
-                          alt={p.name}
-                          onError={(e) => (e.target.src = "/no-image.png")}
-                          style={styles.image}
-                        />
+                        <img src={imageSrc} alt={p.name} style={styles.image} />
                       </div>
 
                       <div style={styles.itemDetails}>
                         <h3 style={styles.itemName}>{p.name}</h3>
                         <p style={styles.itemCategory}>{p.category}</p>
-                        <div style={styles.itemFeatures}>
-                          <span style={styles.feature}>✓ Free Delivery</span>
-                          <span style={styles.feature}>✓ 7 Day Replacement</span>
-                        </div>
-                        <div style={styles.itemPriceSection}>
+
+                        <div
+                          style={styles.itemPriceSection}
+                          className="cart-price"
+                        >
                           <span style={styles.itemPrice}>₹{p.price}</span>
                           <span style={styles.itemOriginalPrice}>
                             ₹{Math.floor(p.price * 1.3)}
@@ -122,8 +134,7 @@ export default function Cart() {
                         onClick={() => removeFromCart(p._id)}
                         style={styles.removeButton}
                       >
-                        <Trash2 size={20} />
-                        <span>Remove</span>
+                        <Trash2 size={18} /> Remove
                       </button>
                     </div>
                   );
@@ -132,69 +143,37 @@ export default function Cart() {
             )}
           </div>
 
+          {/* RIGHT */}
           {cart.length > 0 && (
-            <div style={styles.rightColumn}>
+            <div style={styles.rightColumn} className="cart-summary">
               <div style={styles.summaryCard}>
                 <h3 style={styles.summaryTitle}>Order Summary</h3>
 
                 <div style={styles.summaryRow}>
-                  <span style={styles.summaryLabel}>Subtotal ({cart.length} items)</span>
-                  <span style={styles.summaryValue}>₹{totalPrice + savings}</span>
+                  <span>Subtotal</span>
+                  <span>₹{totalPrice + savings}</span>
                 </div>
 
                 <div style={styles.summaryRow}>
-                  <span style={styles.summaryLabel}>Discount</span>
-                  <span style={styles.discountValue}>- ₹{savings}</span>
+                  <span>Discount</span>
+                  <span style={styles.discountValue}>-₹{savings}</span>
                 </div>
 
                 <div style={styles.summaryRow}>
-                  <span style={styles.summaryLabel}>Delivery Charges</span>
+                  <span>Delivery</span>
                   <span style={styles.freeValue}>FREE</span>
                 </div>
 
                 <div style={styles.divider}></div>
 
                 <div style={styles.totalRow}>
-                  <span style={styles.totalLabel}>Total Amount</span>
+                  <span>Total</span>
                   <span style={styles.totalValue}>₹{totalPrice}</span>
                 </div>
 
-                <div style={styles.savingsInfo}>
-                  <Tag size={18} style={{ color: "#22c55e" }} />
-                  <span>You will save ₹{savings} on this order</span>
-                </div>
-
                 <button onClick={placeOrder} style={styles.checkoutButton}>
-                  <MessageCircle size={22} />
-                  <span>Place Order via WhatsApp</span>
+                  <MessageCircle size={20} /> Place Order via WhatsApp
                 </button>
-
-                <div style={styles.secureInfo}>
-                  <span>🔒</span>
-                  <span>100% Secure Payments</span>
-                </div>
-              </div>
-
-              <div style={styles.benefitsCard}>
-                <h4 style={styles.benefitsTitle}>Why shop with us?</h4>
-                <div style={styles.benefitsList}>
-                  <div style={styles.benefitItem}>
-                    <span style={styles.benefitIcon}>✓</span>
-                    <span>Free delivery on all orders</span>
-                  </div>
-                  <div style={styles.benefitItem}>
-                    <span style={styles.benefitIcon}>✓</span>
-                    <span>Cash on Delivery available</span>
-                  </div>
-                  <div style={styles.benefitItem}>
-                    <span style={styles.benefitIcon}>✓</span>
-                    <span>7-day replacement policy</span>
-                  </div>
-                  <div style={styles.benefitItem}>
-                    <span style={styles.benefitIcon}>✓</span>
-                    <span>24/7 Customer support</span>
-                  </div>
-                </div>
               </div>
             </div>
           )}
@@ -203,6 +182,7 @@ export default function Cart() {
     </div>
   );
 }
+
 
 const styles = {
   page: {

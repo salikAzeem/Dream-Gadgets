@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, ShoppingCart, Zap, Truck, Shield, RotateCcw, Heart, Share2, Star, Award } from "lucide-react";
 import API from "../services/api";
 import { useCart } from "../context/CartContext";
+import "../styles/productDetail.css";
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -52,7 +53,8 @@ export default function ProductDetail() {
   };
 
   return (
-    <div style={styles.page}>
+    <div style={styles.page} className="pd-page">
+
       <div style={styles.navbar}>
         <div style={styles.navContainer}>
           <Link to="/" style={styles.backLink}>
@@ -71,9 +73,11 @@ export default function ProductDetail() {
       </div>
 
       <div style={styles.container}>
-        <div style={styles.mainContent}>
+        <div style={styles.mainContent} className="pd-main">
+
           <div style={styles.leftSection}>
-            <div style={styles.imageSection}>
+            <div style={styles.imageSection} className="pd-image">
+
               <div style={styles.mainImageWrapper}>
                 <div style={styles.badge}>
                   <Award size={14} />
@@ -88,7 +92,7 @@ export default function ProductDetail() {
               </div>
             </div>
 
-            <div style={styles.featureBoxes}>
+            <div style={styles.featureBoxes} className="pd-features">
               <div style={styles.featureBox}>
                 <Truck size={24} style={{ color: "#2874f0" }} />
                 <div>
@@ -96,14 +100,14 @@ export default function ProductDetail() {
                   <div style={styles.featureText}>On all orders</div>
                 </div>
               </div>
-              <div style={styles.featureBox}>
+              <div style={styles.featureBoxes} className="pd-features">
                 <Shield size={24} style={{ color: "#22c55e" }} />
                 <div>
                   <div style={styles.featureTitle}>Secure Payment</div>
                   <div style={styles.featureText}>100% protected</div>
                 </div>
               </div>
-              <div style={styles.featureBox}>
+              <div style={styles.featureBoxes} className="pd-features">
                 <RotateCcw size={24} style={{ color: "#f59e0b" }} />
                 <div>
                   <div style={styles.featureTitle}>Easy Returns</div>
@@ -114,7 +118,8 @@ export default function ProductDetail() {
           </div>
 
           <div style={styles.rightSection}>
-            <div style={styles.productInfo}>
+            <div style={styles.productInfo} className="pd-info">
+
               <div style={styles.categoryBadge}>{product.category}</div>
               <h1 style={styles.productTitle}>{product.name}</h1>
 
@@ -161,7 +166,8 @@ export default function ProductDetail() {
                 </p>
               </div>
 
-              <div style={styles.actionButtons}>
+              <div style={styles.actionButtons} className="pd-actions">
+
                 <button onClick={() => addToCart(product)} style={styles.addToCartBtn}>
                   <ShoppingCart size={22} />
                   <span>Add to Cart</span>
@@ -181,7 +187,8 @@ export default function ProductDetail() {
             <span>Ratings & Reviews</span>
           </h2>
 
-          <div style={styles.reviewsGrid}>
+          <div style={styles.reviewsGrid} className="pd-reviews">
+
             <div style={styles.reviewCard}>
               <div style={styles.reviewHeader}>
                 <div style={styles.reviewRating}>

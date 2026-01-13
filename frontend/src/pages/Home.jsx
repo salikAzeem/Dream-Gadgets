@@ -3,6 +3,8 @@ import Navbar from "../components/Navbar";
 import ProductCard from "../components/ProductCard";
 import API from "../services/api";
 import { Sparkles, TrendingUp, Zap, Package } from "lucide-react";
+import "../styles/home.css";
+
 
 export default function Home() {
   const [products, setProducts] = useState([]);
@@ -10,6 +12,7 @@ export default function Home() {
   const categories = [
     { name: "All", icon: "📱" },
     { name: "Phone", icon: "📱" },
+    { name: "Used Phone", icon: "📱" },
     { name: "Phone Cover", icon: "🛡️" },
     { name: "Earbuds", icon: "🎧" },
     { name: "Smart Watch", icon: "⌚" },
@@ -30,11 +33,14 @@ export default function Home() {
       : products.filter((p) => p.category === selectedCategory);
 
   return (
-    <div style={styles.page}>
+    <div style={styles.page} className="home-page">
+
       <Navbar />
 
-      <div style={styles.hero}>
-        <div style={styles.heroContent}>
+      <div style={styles.hero} className="hero-section">
+
+        <div style={styles.heroContent} className="hero-content">
+
           <div style={styles.heroText}>
             <div style={styles.heroTag}>
               <Sparkles size={16} />
@@ -47,7 +53,8 @@ export default function Home() {
             <p style={styles.heroSubtitle}>
               Shop the latest tech at unbeatable prices. Free delivery on all orders!
             </p>
-            <div style={styles.heroStats}>
+            <div style={styles.heroStats} className="hero-stats">
+
               <div style={styles.statItem}>
                 <TrendingUp size={20} style={{ color: "#22c55e" }} />
                 <div>
@@ -82,7 +89,8 @@ export default function Home() {
       <div style={styles.categorySection}>
         <div style={styles.container}>
           <h2 style={styles.sectionTitle}>Shop by Category</h2>
-          <div style={styles.categoryGrid}>
+          <div style={styles.categoryGrid} className="category-grid">
+
             {categories.map((cat) => (
               <button
                 key={cat.name}
@@ -111,7 +119,8 @@ export default function Home() {
 
       <div style={styles.productsSection}>
         <div style={styles.container}>
-          <div style={styles.headerSection}>
+          <div style={styles.headerSection} className="products-header">
+
             <div>
               <h2 style={styles.heading}>
                 {selectedCategory === "All" ? "All Products" : selectedCategory}
@@ -133,7 +142,8 @@ export default function Home() {
               <p style={styles.emptyText}>Try selecting a different category</p>
             </div>
           ) : (
-            <div style={styles.grid}>
+            <div style={styles.grid} className="product-grid">
+
               {filtered.map((product) => (
                 <ProductCard key={product._id} product={product} />
               ))}

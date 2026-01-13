@@ -3,6 +3,7 @@ import API from "../services/api";
 
 const CATEGORIES = [
   "Phone",
+  "Used Phone",
   "Phone Cover",
   "Earbuds",
   "Smart Watch",

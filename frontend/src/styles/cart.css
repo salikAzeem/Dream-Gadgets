@@ -1,0 +1,60 @@
+/* ================================
+   CART PAGE RESPONSIVENESS
+================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .cart-content {
+    grid-template-columns: 1fr !important;
+  }
+
+  .cart-summary {
+    position: static !important;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .cart-page {
+    padding-bottom: 80px;
+  }
+
+  .cart-item {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 16px;
+  }
+
+  .cart-item img {
+    width: 100px !important;
+    height: 100px !important;
+  }
+
+  .cart-price {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .cart-summary {
+    width: 100%;
+  }
+
+  .checkout-btn {
+    width: 100%;
+  }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+  .cart-item {
+    padding: 16px !important;
+  }
+
+  .cart-item h3 {
+    font-size: 16px !important;
+  }
+
+  .cart-item span {
+    font-size: 13px !important;
+  }
+}

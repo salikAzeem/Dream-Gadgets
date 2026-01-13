@@ -2,6 +2,7 @@ import { useCart } from "../context/CartContext";
 import { Link } from "react-router-dom";
 import { ShoppingCart, Star, TrendingUp } from "lucide-react";
 import { useState } from "react";
+import "../styles/productCard.css";
 
 export default function ProductCard({ product }) {
   const { addToCart } = useCart();
@@ -16,6 +17,7 @@ export default function ProductCard({ product }) {
 
   return (
     <div
+      className="pc-card"
       style={{
         ...styles.card,
         transform: isHovered ? "translateY(-12px)" : "translateY(0)",
@@ -32,7 +34,7 @@ export default function ProductCard({ product }) {
       </div>
 
       <Link to={`/product/${product._id}`} style={styles.link}>
-        <div style={styles.imageContainer}>
+        <div style={styles.imageContainer} className="pc-image-container">
           <div style={styles.imageWrapper}>
             <img
               src={imageSrc}
@@ -46,10 +48,12 @@ export default function ProductCard({ product }) {
           </div>
         </div>
 
-        <div style={styles.content}>
+        <div style={styles.content} className="pc-content">
           <div style={styles.categoryTag}>{product.category}</div>
 
-          <h3 style={styles.title}>{product.name}</h3>
+          <h3 style={styles.title} className="pc-title">
+            {product.name}
+          </h3>
 
           <div style={styles.ratingRow}>
             <div style={styles.rating}>
@@ -59,15 +63,17 @@ export default function ProductCard({ product }) {
             <span style={styles.reviews}>(256 reviews)</span>
           </div>
 
-          <div style={styles.priceSection}>
+          <div style={styles.priceSection} className="pc-price">
             <div>
               <p style={styles.price}>₹{product.price}</p>
-              <p style={styles.originalPrice}>₹{Math.floor(product.price * 1.3)}</p>
+              <p style={styles.originalPrice}>
+                ₹{Math.floor(product.price * 1.3)}
+              </p>
             </div>
             <div style={styles.discount}>23% OFF</div>
           </div>
 
-          <div style={styles.features}>
+          <div style={styles.features} className="pc-features">
             <span style={styles.feature}>✓ Fast Delivery</span>
             <span style={styles.feature}>✓ COD Available</span>
           </div>
@@ -75,6 +81,7 @@ export default function ProductCard({ product }) {
       </Link>
 
       <button
+        className="pc-button"
         onClick={() => addToCart(product)}
         style={{
           ...styles.button,
@@ -88,6 +95,7 @@ export default function ProductCard({ product }) {
     </div>
   );
 }
+
 
 const styles = {
   card: {
