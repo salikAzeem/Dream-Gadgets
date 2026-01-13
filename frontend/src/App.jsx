@@ -3,13 +3,14 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 // User Pages
 import Home from "./pages/Home";
 import Cart from "./pages/Cart";
+import ProductDetail from "./pages/ProductDetail";
 
 // Admin Pages
 import AdminLogin from "./admin/AdminLogin";
 import AdminDashboard from "./admin/AdminDashboard";
 import AddProduct from "./admin/AddProduct";
 import ProductList from "./admin/ProductList";
-import AdminOrders from "./admin/AdminOrders"; // ✅ MISSING IMPORT FIXED
+import AdminOrders from "./admin/AdminOrders";
 
 // 🔐 Admin Route Protection
 const AdminRoute = ({ children }) => {
@@ -25,21 +26,12 @@ function App() {
         {/* USER ROUTES */}
         <Route path="/" element={<Home />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/product/:id" element={<ProductDetail />} />
 
-        {/* ADMIN LOGIN (PUBLIC) */}
+        {/* ADMIN LOGIN */}
         <Route path="/admin/login" element={<AdminLogin />} />
 
-        {/* ADMIN ORDERS */}
-        <Route
-          path="/admin/orders"
-          element={
-            <AdminRoute>
-              <AdminOrders />
-            </AdminRoute>
-          }
-        />
-
-        {/* ADMIN DASHBOARD */}
+        {/* ADMIN ROUTES */}
         <Route
           path="/admin/dashboard"
           element={
@@ -49,7 +41,6 @@ function App() {
           }
         />
 
-        {/* ADD PRODUCT */}
         <Route
           path="/admin/add-product"
           element={
@@ -59,7 +50,6 @@ function App() {
           }
         />
 
-        {/* VIEW PRODUCTS */}
         <Route
           path="/admin/products"
           element={
@@ -69,8 +59,17 @@ function App() {
           }
         />
 
-        {/* FALLBACK */}
-        <Route path="*" element={<Navigate to="/admin/login" />} />
+        <Route
+          path="/admin/orders"
+          element={
+            <AdminRoute>
+              <AdminOrders />
+            </AdminRoute>
+          }
+        />
+
+        {/* ✅ SAFE FALLBACK */}
+        <Route path="*" element={<Navigate to="/" />} />
 
       </Routes>
     </BrowserRouter>
