@@ -1,27 +1,34 @@
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import { ShoppingCart, Search } from "lucide-react";
 
 export default function Navbar() {
   const { cart } = useCart();
 
   return (
     <header style={styles.header}>
-      <Link to="/" style={styles.logo}>
-        Dream<span style={{ color: "#facc15" }}>Gadgets</span>
-      </Link>
+      <div style={styles.container}>
+        <Link to="/" style={styles.logo}>
+          Dream<span style={{ color: "#facc15" }}>Gadgets</span>
+        </Link>
 
-      <input
-        type="text"
-        placeholder="Search for products"
-        style={styles.search}
-      />
+        <div style={styles.searchWrapper}>
+          <Search size={20} style={styles.searchIcon} />
+          <input
+            type="text"
+            placeholder="Search for products, brands and more"
+            style={styles.search}
+          />
+        </div>
 
-      <Link to="/cart" style={styles.cart}>
-        Cart 🛒
-        {cart.length > 0 && (
-          <span style={styles.badge}>{cart.length}</span>
-        )}
-      </Link>
+        <Link to="/cart" style={styles.cart}>
+          <ShoppingCart size={22} />
+          <span style={styles.cartText}>Cart</span>
+          {cart.length > 0 && (
+            <span style={styles.badge}>{cart.length}</span>
+          )}
+        </Link>
+      </div>
     </header>
   );
 }
@@ -29,39 +36,74 @@ export default function Navbar() {
 const styles = {
   header: {
     backgroundColor: "#2874f0",
+    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+    position: "sticky",
+    top: 0,
+    zIndex: 100,
+  },
+  container: {
+    maxWidth: "1400px",
+    margin: "0 auto",
     display: "flex",
     alignItems: "center",
     gap: "20px",
-    padding: "10px 30px",
-    color: "white",
+    padding: "12px 30px",
   },
   logo: {
-    fontSize: "22px",
+    fontSize: "24px",
     fontWeight: "bold",
     color: "white",
     textDecoration: "none",
+    whiteSpace: "nowrap",
+    letterSpacing: "-0.5px",
+  },
+  searchWrapper: {
+    flex: 1,
+    position: "relative",
+    maxWidth: "600px",
+  },
+  searchIcon: {
+    position: "absolute",
+    left: "12px",
+    top: "50%",
+    transform: "translateY(-50%)",
+    color: "#666",
+    pointerEvents: "none",
   },
   search: {
-    flex: 1,
-    padding: "8px 12px",
-    borderRadius: "4px",
+    width: "100%",
+    padding: "10px 12px 10px 40px",
+    borderRadius: "2px",
     border: "none",
     outline: "none",
+    fontSize: "14px",
   },
   cart: {
     position: "relative",
     color: "white",
     textDecoration: "none",
-    fontWeight: "bold",
+    fontWeight: "600",
+    display: "flex",
+    alignItems: "center",
+    gap: "6px",
+    whiteSpace: "nowrap",
+    transition: "transform 0.2s",
+    cursor: "pointer",
+  },
+  cartText: {
+    fontSize: "15px",
   },
   badge: {
     position: "absolute",
-    top: "-6px",
+    top: "-8px",
     right: "-10px",
     backgroundColor: "#facc15",
-    color: "black",
-    fontSize: "12px",
-    padding: "2px 6px",
+    color: "#000",
+    fontSize: "11px",
+    fontWeight: "bold",
+    padding: "3px 6px",
     borderRadius: "50%",
+    minWidth: "20px",
+    textAlign: "center",
   },
 };
