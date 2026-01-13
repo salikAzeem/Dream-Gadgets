@@ -1,8 +1,11 @@
 import { useCart } from "../context/CartContext";
 import { Link } from "react-router-dom";
+import { ShoppingCart, Star, TrendingUp } from "lucide-react";
+import { useState } from "react";
 
 export default function ProductCard({ product }) {
   const { addToCart } = useCart();
+  const [isHovered, setIsHovered] = useState(false);
 
   const imageSrc =
     product.image && product.image.startsWith("http")
@@ -13,60 +16,74 @@ export default function ProductCard({ product }) {
 
   return (
     <div
-      style={styles.card}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.transform = "translateY(-8px)";
-        e.currentTarget.style.boxShadow = "0 12px 24px rgba(0,0,0,0.15)";
+      style={{
+        ...styles.card,
+        transform: isHovered ? "translateY(-12px)" : "translateY(0)",
+        boxShadow: isHovered
+          ? "0 20px 40px rgba(0,0,0,0.15)"
+          : "0 4px 12px rgba(0,0,0,0.08)",
       }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.transform = "translateY(0)";
-        e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.08)";
-      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
+      <div style={styles.badge}>
+        <TrendingUp size={12} />
+        <span>Trending</span>
+      </div>
+
       <Link to={`/product/${product._id}`} style={styles.link}>
         <div style={styles.imageContainer}>
-          <img
-            src={imageSrc}
-            alt={product.name}
-            onError={(e) => (e.target.src = "/no-image.png")}
-            style={styles.image}
-          />
+          <div style={styles.imageWrapper}>
+            <img
+              src={imageSrc}
+              alt={product.name}
+              onError={(e) => (e.target.src = "/no-image.png")}
+              style={{
+                ...styles.image,
+                transform: isHovered ? "scale(1.1)" : "scale(1)",
+              }}
+            />
+          </div>
         </div>
 
         <div style={styles.content}>
-          <h3 style={styles.title}>
-            {product.name}
-          </h3>
+          <div style={styles.categoryTag}>{product.category}</div>
 
-          <p style={styles.category}>
-            {product.category}
-          </p>
+          <h3 style={styles.title}>{product.name}</h3>
 
-          <div style={styles.priceSection}>
-            <p style={styles.price}>
-              ₹{product.price}
-            </p>
+          <div style={styles.ratingRow}>
             <div style={styles.rating}>
-              <span style={styles.star}>★</span>
+              <Star size={14} fill="#22c55e" stroke="#22c55e" />
               <span style={styles.ratingText}>4.2</span>
             </div>
+            <span style={styles.reviews}>(256 reviews)</span>
+          </div>
+
+          <div style={styles.priceSection}>
+            <div>
+              <p style={styles.price}>₹{product.price}</p>
+              <p style={styles.originalPrice}>₹{Math.floor(product.price * 1.3)}</p>
+            </div>
+            <div style={styles.discount}>23% OFF</div>
+          </div>
+
+          <div style={styles.features}>
+            <span style={styles.feature}>✓ Fast Delivery</span>
+            <span style={styles.feature}>✓ COD Available</span>
           </div>
         </div>
       </Link>
 
       <button
         onClick={() => addToCart(product)}
-        style={styles.button}
-        onMouseEnter={(e) => {
-          e.target.style.backgroundColor = "#f5a623";
-          e.target.style.transform = "scale(1.02)";
-        }}
-        onMouseLeave={(e) => {
-          e.target.style.backgroundColor = "#facc15";
-          e.target.style.transform = "scale(1)";
+        style={{
+          ...styles.button,
+          backgroundColor: isHovered ? "#f59e0b" : "#facc15",
+          transform: isHovered ? "scale(1.02)" : "scale(1)",
         }}
       >
-        Add to Cart
+        <ShoppingCart size={18} />
+        <span>Add to Cart</span>
       </button>
     </div>
   );
@@ -75,14 +92,31 @@ export default function ProductCard({ product }) {
 const styles = {
   card: {
     backgroundColor: "white",
-    borderRadius: "8px",
+    borderRadius: "16px",
     overflow: "hidden",
-    transition: "all 0.3s ease",
+    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
     cursor: "pointer",
     display: "flex",
     flexDirection: "column",
-    boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
     height: "100%",
+    position: "relative",
+    border: "1px solid #f0f0f0",
+  },
+  badge: {
+    position: "absolute",
+    top: "12px",
+    left: "12px",
+    background: "linear-gradient(135deg, #ec4899 0%, #f43f5e 100%)",
+    color: "white",
+    padding: "6px 12px",
+    borderRadius: "20px",
+    fontSize: "11px",
+    fontWeight: "600",
+    zIndex: 10,
+    display: "flex",
+    alignItems: "center",
+    gap: "4px",
+    boxShadow: "0 2px 8px rgba(236, 72, 153, 0.3)",
   },
   link: {
     textDecoration: "none",
@@ -92,80 +126,126 @@ const styles = {
     flexDirection: "column",
   },
   imageContainer: {
-    padding: "20px",
-    backgroundColor: "#fafafa",
+    padding: "32px 20px 20px 20px",
+    background: "linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)",
+    borderBottom: "1px solid #f0f0f0",
+  },
+  imageWrapper: {
+    height: "180px",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    height: "200px",
-    borderBottom: "1px solid #f0f0f0",
+    backgroundColor: "white",
+    borderRadius: "12px",
+    padding: "16px",
+    boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
   },
   image: {
     width: "100%",
     height: "100%",
     objectFit: "contain",
+    transition: "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
   },
   content: {
-    padding: "16px",
+    padding: "20px",
     flex: 1,
     display: "flex",
     flexDirection: "column",
+    gap: "10px",
+  },
+  categoryTag: {
+    fontSize: "11px",
+    color: "#2874f0",
+    fontWeight: "600",
+    textTransform: "uppercase",
+    letterSpacing: "0.5px",
+    backgroundColor: "#e0f2fe",
+    padding: "4px 10px",
+    borderRadius: "4px",
+    alignSelf: "flex-start",
   },
   title: {
-    fontSize: "14px",
-    fontWeight: "500",
+    fontSize: "15px",
+    fontWeight: "600",
     color: "#212121",
-    marginBottom: "6px",
     display: "-webkit-box",
     WebkitLineClamp: 2,
     WebkitBoxOrient: "vertical",
     overflow: "hidden",
-    lineHeight: "1.4",
-    minHeight: "39px",
+    lineHeight: "1.5",
+    minHeight: "45px",
   },
-  category: {
-    fontSize: "12px",
-    color: "#878787",
-    marginBottom: "12px",
-  },
-  priceSection: {
+  ratingRow: {
     display: "flex",
     alignItems: "center",
-    justifyContent: "space-between",
-    marginTop: "auto",
-  },
-  price: {
-    fontSize: "18px",
-    fontWeight: "600",
-    color: "#212121",
+    gap: "8px",
   },
   rating: {
     display: "flex",
     alignItems: "center",
     gap: "4px",
-    backgroundColor: "#388e3c",
+    backgroundColor: "#22c55e",
     padding: "4px 8px",
-    borderRadius: "4px",
-  },
-  star: {
-    color: "white",
-    fontSize: "12px",
+    borderRadius: "6px",
   },
   ratingText: {
     color: "white",
     fontSize: "12px",
-    fontWeight: "600",
+    fontWeight: "700",
+  },
+  reviews: {
+    fontSize: "12px",
+    color: "#878787",
+  },
+  priceSection: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginTop: "4px",
+  },
+  price: {
+    fontSize: "22px",
+    fontWeight: "700",
+    color: "#212121",
+    marginBottom: "2px",
+  },
+  originalPrice: {
+    fontSize: "13px",
+    color: "#878787",
+    textDecoration: "line-through",
+  },
+  discount: {
+    color: "#22c55e",
+    fontSize: "13px",
+    fontWeight: "700",
+    backgroundColor: "#f0fdf4",
+    padding: "6px 10px",
+    borderRadius: "6px",
+  },
+  features: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "4px",
+    marginTop: "4px",
+  },
+  feature: {
+    fontSize: "11px",
+    color: "#059669",
+    fontWeight: "500",
   },
   button: {
     width: "100%",
-    backgroundColor: "#facc15",
     color: "#000",
-    fontWeight: "600",
-    padding: "12px",
+    fontWeight: "700",
+    padding: "14px",
     border: "none",
     cursor: "pointer",
-    fontSize: "14px",
+    fontSize: "15px",
     transition: "all 0.2s ease",
-    borderTop: "1px solid #f0f0f0",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "8px",
+    boxShadow: "0 -2px 10px rgba(0,0,0,0.05)",
   },
 };

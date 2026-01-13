@@ -1,109 +1,323 @@
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-import { ShoppingCart, Search } from "lucide-react";
+import "../styles/navbar.css";
+
+import {
+  ShoppingCart,
+  Search,
+  Menu,
+  X,
+  Moon,
+  Sun,
+  ChevronDown,
+} from "lucide-react";
+
+const categories = [
+  "Mobiles",
+  "Laptops",
+  "Headphones",
+  "Smart Watches",
+  "Accessories",
+];
 
 export default function Navbar() {
   const { cart } = useCart();
+  const navigate = useNavigate();
+
+  const [query, setQuery] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [dark, setDark] = useState(
+    localStorage.getItem("theme") === "dark"
+  );
+  const [showCategories, setShowCategories] = useState(false);
+
+  /* 🌙 Dark Mode */
+  useEffect(() => {
+    document.body.style.background = dark ? "#0f172a" : "#f9fafb";
+    localStorage.setItem("theme", dark ? "dark" : "light");
+  }, [dark]);
+
+  /* 🔍 Search */
+  const handleSearch = () => {
+    if (!query.trim()) return;
+    navigate(`/search?q=${query}`);
+    setQuery("");
+    setMenuOpen(false);
+  };
 
   return (
-    <header style={styles.header}>
-      <div style={styles.container}>
-        <Link to="/" style={styles.logo}>
-          Dream<span style={{ color: "#facc15" }}>Gadgets</span>
-        </Link>
+    <header style={{ ...styles.header, ...(dark && styles.darkHeader) }}>
+      {/* TOP BAR */}
+      <div style={{ ...styles.topBar, ...(dark && styles.darkTopBar) }}>
+        Premium Gadgets at Unbeatable Prices
+      </div>
 
-        <div style={styles.searchWrapper}>
-          <Search size={20} style={styles.searchIcon} />
-          <input
-            type="text"
-            placeholder="Search for products, brands and more"
-            style={styles.search}
-          />
+      {/* MAIN NAV */}
+      <div style={styles.nav} className="navbar">
+
+        {/* LEFT */}
+        <div style={styles.left}>
+          <button
+  className="menu-btn"
+  style={styles.menuBtn}
+  onClick={() => setMenuOpen(!menuOpen)}
+>
+
+            {menuOpen ? <X /> : <Menu />}
+          </button>
+
+          <Link to="/" style={styles.logo}>
+            <span style={styles.logoIcon}>DG</span>
+            Dream<span style={{ color: "#facc15" }}>Gadgets</span>
+          </Link>
+
+          {/* CATEGORIES */}
+          <div
+            style={styles.categoryWrapper}
+            onMouseEnter={() => setShowCategories(true)}
+            onMouseLeave={() => setShowCategories(false)}
+          >
+            <button style={styles.categoryBtn}>
+              Categories <ChevronDown size={16} />
+            </button>
+
+            {showCategories && (
+              <div style={{ ...styles.dropdown, ...(dark && styles.darkDrop) }}>
+                {categories.map((cat) => (
+                  <Link
+                    key={cat}
+                    to={`/category/${cat}`}
+                    style={styles.dropItem}
+                  >
+                    {cat}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
-        <Link to="/cart" style={styles.cart}>
-          <ShoppingCart size={22} />
-          <span style={styles.cartText}>Cart</span>
-          {cart.length > 0 && (
-            <span style={styles.badge}>{cart.length}</span>
-          )}
-        </Link>
+        {/* SEARCH */}
+        <div style={styles.searchBox} className="nav-search">
+
+          <Search size={18} />
+          <input
+            style={styles.searchInput}
+            placeholder="Search products..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+          />
+          <button onClick={handleSearch} style={styles.searchBtn}>
+            Search
+          </button>
+        </div>
+
+        {/* RIGHT */}
+        <div style={styles.right}>
+          <button
+            style={styles.themeBtn}
+            onClick={() => setDark(!dark)}
+          >
+            {dark ? <Sun /> : <Moon />}
+          </button>
+
+          <Link to="/cart" style={styles.cart}>
+            <ShoppingCart />
+            {cart.length > 0 && (
+              <span style={styles.badge}>{cart.length}</span>
+            )}
+          </Link>
+        </div>
       </div>
+
+      {/* MOBILE MENU */}
+      {menuOpen && (
+  <div style={styles.mobileMenu} className="mobile-menu">
+
+          {categories.map((cat) => (
+            <Link
+              key={cat}
+              to={`/category/${cat}`}
+              onClick={() => setMenuOpen(false)}
+              style={styles.mobileItem}
+            >
+              {cat}
+            </Link>
+          ))}
+        </div>
+      )}
     </header>
   );
 }
-
 const styles = {
   header: {
-    backgroundColor: "#2874f0",
-    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
     position: "sticky",
     top: 0,
-    zIndex: 100,
+    zIndex: 999,
+    background: "#2874f0",
+    color: "#fff",
   },
-  container: {
-    maxWidth: "1400px",
-    margin: "0 auto",
+
+  darkHeader: {
+    background: "#020617",
+  },
+
+  topBar: {
+    textAlign: "center",
+    fontSize: "13px",
+    padding: "6px",
+    background: "#1e3a8a",
+  },
+
+  darkTopBar: {
+    background: "#020617",
+  },
+
+  nav: {
     display: "flex",
     alignItems: "center",
-    gap: "20px",
-    padding: "12px 30px",
+    justifyContent: "space-between",
+    padding: "12px 20px",
+    gap: "12px",
   },
+
+  left: {
+    display: "flex",
+    alignItems: "center",
+    gap: "14px",
+  },
+
   logo: {
-    fontSize: "24px",
-    fontWeight: "bold",
-    color: "white",
+    color: "#fff",
     textDecoration: "none",
-    whiteSpace: "nowrap",
-    letterSpacing: "-0.5px",
+    fontWeight: 700,
+    fontSize: "20px",
   },
-  searchWrapper: {
-    flex: 1,
+
+  logoIcon: {
+    background: "#facc15",
+    color: "#000",
+    padding: "4px 8px",
+    borderRadius: "8px",
+    marginRight: "6px",
+  },
+
+  menuBtn: {
+    background: "transparent",
+    border: "none",
+    color: "#fff",
+    cursor: "pointer",
+    display: "none",
+  },
+
+  categoryWrapper: {
     position: "relative",
-    maxWidth: "600px",
   },
-  searchIcon: {
+
+  categoryBtn: {
+    background: "transparent",
+    border: "none",
+    color: "#fff",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    gap: "4px",
+  },
+
+  dropdown: {
     position: "absolute",
-    left: "12px",
-    top: "50%",
-    transform: "translateY(-50%)",
-    color: "#666",
-    pointerEvents: "none",
+    top: "36px",
+    left: 0,
+    background: "#fff",
+    color: "#000",
+    borderRadius: "10px",
+    overflow: "hidden",
+    boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
+    zIndex: 1000,
   },
-  search: {
-    width: "100%",
-    padding: "10px 12px 10px 40px",
-    borderRadius: "2px",
+
+  darkDrop: {
+    background: "#020617",
+    color: "#fff",
+  },
+
+  dropItem: {
+    padding: "10px 14px",
+    display: "block",
+    textDecoration: "none",
+    color: "inherit",
+  },
+
+  searchBox: {
+    flex: 1,
+    maxWidth: "450px",
+    display: "flex",
+    alignItems: "center",
+    background: "#fff",
+    borderRadius: "999px",
+    padding: "4px 10px",
+    color: "#000",
+  },
+
+  searchInput: {
+    flex: 1,
     border: "none",
     outline: "none",
-    fontSize: "14px",
+    padding: "8px",
   },
-  cart: {
-    position: "relative",
-    color: "white",
-    textDecoration: "none",
-    fontWeight: "600",
+
+  searchBtn: {
+    background: "#facc15",
+    border: "none",
+    borderRadius: "999px",
+    padding: "6px 16px",
+    cursor: "pointer",
+    fontWeight: 600,
+  },
+
+  right: {
     display: "flex",
     alignItems: "center",
-    gap: "6px",
-    whiteSpace: "nowrap",
-    transition: "transform 0.2s",
+    gap: "14px",
+  },
+
+  themeBtn: {
+    background: "transparent",
+    border: "none",
+    color: "#fff",
     cursor: "pointer",
   },
-  cartText: {
-    fontSize: "15px",
+
+  cart: {
+    position: "relative",
+    color: "#fff",
+    textDecoration: "none",
   },
+
   badge: {
     position: "absolute",
-    top: "-8px",
-    right: "-10px",
-    backgroundColor: "#facc15",
+    top: "-6px",
+    right: "-8px",
+    background: "#facc15",
     color: "#000",
+    borderRadius: "50%",
+    padding: "2px 6px",
     fontSize: "11px",
     fontWeight: "bold",
-    padding: "3px 6px",
-    borderRadius: "50%",
-    minWidth: "20px",
-    textAlign: "center",
+  },
+
+  mobileMenu: {
+    display: "none",
+    flexDirection: "column",
+    padding: "10px",
+  },
+
+  mobileItem: {
+    padding: "12px",
+    textDecoration: "none",
+    color: "inherit",
   },
 };
+

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, ShoppingCart, Zap, Truck, Shield, RotateCcw } from "lucide-react";
+import { ArrowLeft, ShoppingCart, Zap, Truck, Shield, RotateCcw, Heart, Share2, Star, Award } from "lucide-react";
 import API from "../services/api";
 import { useCart } from "../context/CartContext";
 
@@ -8,6 +8,7 @@ export default function ProductDetail() {
   const { id } = useParams();
   const { addToCart } = useCart();
   const [product, setProduct] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(0);
 
   useEffect(() => {
     API.get("/products").then((res) => {
@@ -17,7 +18,12 @@ export default function ProductDetail() {
   }, [id]);
 
   if (!product) {
-    return <p className="p-10">Loading product...</p>;
+    return (
+      <div style={styles.loading}>
+        <div style={styles.spinner}></div>
+        <p>Loading product...</p>
+      </div>
+    );
   }
 
   const imageSrc =
@@ -29,156 +35,201 @@ export default function ProductDetail() {
 
   const renderStars = (rating = 4) => {
     return (
-      <div className="flex items-center gap-1 mt-3">
+      <div style={styles.starsContainer}>
         {[1, 2, 3, 4, 5].map((i) => (
-          <span
+          <Star
             key={i}
-            className={`text-xl ${
-              i <= rating ? "text-green-600" : "text-gray-300"
-            }`}
-          >
-            ★
-          </span>
+            size={18}
+            fill={i <= rating ? "#22c55e" : "none"}
+            stroke={i <= rating ? "#22c55e" : "#cbd5e1"}
+            strokeWidth={2}
+          />
         ))}
-        <span className="text-sm text-gray-600 ml-2 font-medium">
-          4.0
-        </span>
-        <span className="text-sm text-gray-400">
-          (120 Ratings & 34 Reviews)
-        </span>
+        <span style={styles.ratingValue}>4.0</span>
+        <span style={styles.ratingCount}>(120 Ratings & 34 Reviews)</span>
       </div>
     );
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen">
-      <div className="bg-white border-b sticky top-0 z-10 shadow-sm">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <Link
-            to="/"
-            className="text-blue-600 text-sm hover:text-blue-700 font-medium inline-flex items-center gap-2 transition"
-          >
-            <ArrowLeft size={18} />
-            Back to Home
+    <div style={styles.page}>
+      <div style={styles.navbar}>
+        <div style={styles.navContainer}>
+          <Link to="/" style={styles.backLink}>
+            <ArrowLeft size={20} />
+            <span>Back to Home</span>
           </Link>
+          <div style={styles.navActions}>
+            <button style={styles.iconBtn}>
+              <Heart size={20} />
+            </button>
+            <button style={styles.iconBtn}>
+              <Share2 size={20} />
+            </button>
+          </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto py-8 px-6">
-        <div className="bg-white rounded-lg shadow-sm p-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <div className="flex justify-center lg:justify-start">
-              <div className="w-full max-w-[420px] h-[420px] border border-gray-200 bg-white flex items-center justify-center rounded-lg p-8" style={{ backgroundColor: "#fafafa" }}>
+      <div style={styles.container}>
+        <div style={styles.mainContent}>
+          <div style={styles.leftSection}>
+            <div style={styles.imageSection}>
+              <div style={styles.mainImageWrapper}>
+                <div style={styles.badge}>
+                  <Award size={14} />
+                  <span>Best Seller</span>
+                </div>
                 <img
                   src={imageSrc}
                   alt={product.name}
                   onError={(e) => (e.currentTarget.src = "/no-image.png")}
-                  style={{ width: "20%", height: "20%", objectFit: "contain" }}
+                  style={styles.mainImage}
                 />
               </div>
             </div>
 
-            <div>
-              <h1 className="text-3xl font-semibold text-gray-900 leading-tight">
-                {product.name}
-              </h1>
-
-              {renderStars(4)}
-
-              <p className="text-sm text-gray-500 mt-4 bg-gray-50 inline-block px-3 py-1 rounded">
-                Category: <span className="font-medium text-gray-700">{product.category}</span>
-              </p>
-
-              <div className="mt-6 flex items-baseline gap-3">
-                <span className="text-4xl font-bold text-gray-900">
-                  ₹{product.price}
-                </span>
-                <span className="text-green-600 text-sm font-semibold">
-                  Inclusive of all taxes
-                </span>
+            <div style={styles.featureBoxes}>
+              <div style={styles.featureBox}>
+                <Truck size={24} style={{ color: "#2874f0" }} />
+                <div>
+                  <div style={styles.featureTitle}>Free Delivery</div>
+                  <div style={styles.featureText}>On all orders</div>
+                </div>
               </div>
-
-              <div className="mt-6 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-lg p-5">
-                <h4 className="font-semibold text-base mb-3 text-green-900 flex items-center gap-2">
-                  <Shield size={18} className="text-green-600" />
-                  Available Offers
-                </h4>
-                <ul className="text-sm text-gray-700 space-y-2">
-                  <li className="flex items-center gap-2">
-                    <Truck size={16} className="text-green-600" />
-                    Free Delivery
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Shield size={16} className="text-green-600" />
-                    Cash on Delivery Available
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <RotateCcw size={16} className="text-green-600" />
-                    Easy 7-day Replacement
-                  </li>
-                </ul>
+              <div style={styles.featureBox}>
+                <Shield size={24} style={{ color: "#22c55e" }} />
+                <div>
+                  <div style={styles.featureTitle}>Secure Payment</div>
+                  <div style={styles.featureText}>100% protected</div>
+                </div>
               </div>
-
-              <div className="mt-8">
-                <h3 className="font-semibold text-lg mb-3 text-gray-900">
-                  Product Description
-                </h3>
-                <p className="text-gray-600 leading-relaxed text-[15px]">
-                  {product.description || "No description available."}
-                </p>
-              </div>
-
-              <div className="mt-10 flex gap-4">
-                <button
-                  onClick={() => addToCart(product)}
-                  className="flex-1 bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-4 rounded-lg text-base transition shadow-md hover:shadow-lg flex items-center justify-center gap-2"
-                >
-                  <ShoppingCart size={20} />
-                  Add to Cart
-                </button>
-
-                <button className="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 rounded-lg text-base transition shadow-md hover:shadow-lg flex items-center justify-center gap-2">
-                  <Zap size={20} />
-                  Buy Now
-                </button>
+              <div style={styles.featureBox}>
+                <RotateCcw size={24} style={{ color: "#f59e0b" }} />
+                <div>
+                  <div style={styles.featureTitle}>Easy Returns</div>
+                  <div style={styles.featureText}>7 day replacement</div>
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="mt-16 border-t pt-10">
-            <h2 className="text-2xl font-semibold mb-8 text-gray-900">
-              Ratings & Reviews
-            </h2>
+          <div style={styles.rightSection}>
+            <div style={styles.productInfo}>
+              <div style={styles.categoryBadge}>{product.category}</div>
+              <h1 style={styles.productTitle}>{product.name}</h1>
 
-            <div className="space-y-4">
-              <div className="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:border-gray-300 transition">
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="bg-green-600 text-white text-sm px-3 py-1 rounded font-semibold flex items-center gap-1">
-                    ★ 4
-                  </span>
-                  <span className="font-semibold text-gray-900">Good Quality</span>
+              {renderStars(4)}
+
+              <div style={styles.priceSection}>
+                <div style={styles.priceWrapper}>
+                  <span style={styles.currentPrice}>₹{product.price}</span>
+                  <span style={styles.originalPrice}>₹{Math.floor(product.price * 1.3)}</span>
+                  <span style={styles.discountBadge}>23% OFF</span>
                 </div>
-                <p className="text-sm text-gray-700 leading-relaxed">
-                  Product quality is very good and delivery was fast.
-                </p>
-                <p className="text-xs text-gray-500 mt-3">
-                  — Rohan, Delhi
+                <div style={styles.taxInfo}>Inclusive of all taxes</div>
+              </div>
+
+              <div style={styles.offersSection}>
+                <h3 style={styles.offersTitle}>
+                  <Zap size={20} style={{ color: "#facc15" }} />
+                  Available Offers
+                </h3>
+                <div style={styles.offersList}>
+                  <div style={styles.offerItem}>
+                    <Truck size={18} style={{ color: "#22c55e" }} />
+                    <span>Free Delivery on all orders</span>
+                  </div>
+                  <div style={styles.offerItem}>
+                    <Shield size={18} style={{ color: "#22c55e" }} />
+                    <span>Cash on Delivery Available</span>
+                  </div>
+                  <div style={styles.offerItem}>
+                    <RotateCcw size={18} style={{ color: "#22c55e" }} />
+                    <span>Easy 7-day Replacement Policy</span>
+                  </div>
+                  <div style={styles.offerItem}>
+                    <Award size={18} style={{ color: "#22c55e" }} />
+                    <span>1 Year Warranty on all products</span>
+                  </div>
+                </div>
+              </div>
+
+              <div style={styles.description}>
+                <h3 style={styles.descriptionTitle}>Product Description</h3>
+                <p style={styles.descriptionText}>
+                  {product.description || "High-quality product with premium features and excellent build quality. Perfect for everyday use with reliable performance."}
                 </p>
               </div>
 
-              <div className="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:border-gray-300 transition">
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="bg-green-600 text-white text-sm px-3 py-1 rounded font-semibold flex items-center gap-1">
-                    ★ 5
-                  </span>
-                  <span className="font-semibold text-gray-900">Worth the price</span>
+              <div style={styles.actionButtons}>
+                <button onClick={() => addToCart(product)} style={styles.addToCartBtn}>
+                  <ShoppingCart size={22} />
+                  <span>Add to Cart</span>
+                </button>
+                <button style={styles.buyNowBtn}>
+                  <Zap size={22} />
+                  <span>Buy Now</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style={styles.reviewsSection}>
+          <h2 style={styles.reviewsTitle}>
+            <Star size={28} fill="#22c55e" stroke="#22c55e" />
+            <span>Ratings & Reviews</span>
+          </h2>
+
+          <div style={styles.reviewsGrid}>
+            <div style={styles.reviewCard}>
+              <div style={styles.reviewHeader}>
+                <div style={styles.reviewRating}>
+                  <Star size={16} fill="#22c55e" stroke="#22c55e" />
+                  <span>4</span>
                 </div>
-                <p className="text-sm text-gray-700 leading-relaxed">
-                  Looks premium, fits perfectly. Totally satisfied.
-                </p>
-                <p className="text-xs text-gray-500 mt-3">
-                  — Aditi, Mumbai
-                </p>
+                <span style={styles.reviewTitle}>Good Quality</span>
+              </div>
+              <p style={styles.reviewText}>
+                Product quality is very good and delivery was fast. Packaging was excellent.
+              </p>
+              <div style={styles.reviewFooter}>
+                <span style={styles.reviewAuthor}>Rohan, Delhi</span>
+                <span style={styles.reviewDate}>2 days ago</span>
+              </div>
+            </div>
+
+            <div style={styles.reviewCard}>
+              <div style={styles.reviewHeader}>
+                <div style={styles.reviewRating}>
+                  <Star size={16} fill="#22c55e" stroke="#22c55e" />
+                  <span>5</span>
+                </div>
+                <span style={styles.reviewTitle}>Worth the price</span>
+              </div>
+              <p style={styles.reviewText}>
+                Looks premium, fits perfectly. Totally satisfied with the purchase.
+              </p>
+              <div style={styles.reviewFooter}>
+                <span style={styles.reviewAuthor}>Aditi, Mumbai</span>
+                <span style={styles.reviewDate}>5 days ago</span>
+              </div>
+            </div>
+
+            <div style={styles.reviewCard}>
+              <div style={styles.reviewHeader}>
+                <div style={styles.reviewRating}>
+                  <Star size={16} fill="#22c55e" stroke="#22c55e" />
+                  <span>4</span>
+                </div>
+                <span style={styles.reviewTitle}>Great product</span>
+              </div>
+              <p style={styles.reviewText}>
+                Value for money. Recommended for anyone looking for quality products.
+              </p>
+              <div style={styles.reviewFooter}>
+                <span style={styles.reviewAuthor}>Vikram, Bangalore</span>
+                <span style={styles.reviewDate}>1 week ago</span>
               </div>
             </div>
           </div>
@@ -187,3 +238,377 @@ export default function ProductDetail() {
     </div>
   );
 }
+
+const styles = {
+  page: {
+    minHeight: "100vh",
+    backgroundColor: "#f8fafc",
+  },
+  loading: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    minHeight: "100vh",
+    gap: "20px",
+    color: "#64748b",
+  },
+  spinner: {
+    width: "48px",
+    height: "48px",
+    border: "4px solid #e2e8f0",
+    borderTop: "4px solid #2874f0",
+    borderRadius: "50%",
+    animation: "spin 1s linear infinite",
+  },
+  navbar: {
+    backgroundColor: "white",
+    borderBottom: "1px solid #e2e8f0",
+    position: "sticky",
+    top: 0,
+    zIndex: 100,
+    boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+  },
+  navContainer: {
+    maxWidth: "1400px",
+    margin: "0 auto",
+    padding: "16px 30px",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  backLink: {
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+    color: "#2874f0",
+    textDecoration: "none",
+    fontWeight: "600",
+    fontSize: "15px",
+    transition: "gap 0.2s",
+  },
+  navActions: {
+    display: "flex",
+    gap: "12px",
+  },
+  iconBtn: {
+    width: "40px",
+    height: "40px",
+    border: "1px solid #e2e8f0",
+    backgroundColor: "white",
+    borderRadius: "8px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    cursor: "pointer",
+    transition: "all 0.2s",
+    color: "#64748b",
+  },
+  container: {
+    maxWidth: "1400px",
+    margin: "0 auto",
+    padding: "40px 30px",
+  },
+  mainContent: {
+    display: "grid",
+    gridTemplateColumns: "1fr 1.2fr",
+    gap: "48px",
+    marginBottom: "60px",
+  },
+  leftSection: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "24px",
+  },
+  imageSection: {
+    backgroundColor: "white",
+    borderRadius: "20px",
+    padding: "40px",
+    boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
+  },
+  mainImageWrapper: {
+    position: "relative",
+    height: "450px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    background: "linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)",
+    borderRadius: "16px",
+    padding: "40px",
+  },
+  badge: {
+    position: "absolute",
+    top: "20px",
+    left: "20px",
+    background: "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)",
+    color: "white",
+    padding: "8px 16px",
+    borderRadius: "24px",
+    fontSize: "13px",
+    fontWeight: "600",
+    display: "flex",
+    alignItems: "center",
+    gap: "6px",
+    boxShadow: "0 4px 12px rgba(245, 158, 11, 0.3)",
+  },
+  mainImage: {
+    width: "70%",
+    height: "70%",
+    objectFit: "contain",
+  },
+  featureBoxes: {
+    display: "grid",
+    gridTemplateColumns: "repeat(3, 1fr)",
+    gap: "16px",
+  },
+  featureBox: {
+    backgroundColor: "white",
+    padding: "20px",
+    borderRadius: "12px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    textAlign: "center",
+    gap: "8px",
+    boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+  },
+  featureTitle: {
+    fontSize: "14px",
+    fontWeight: "600",
+    color: "#212121",
+  },
+  featureText: {
+    fontSize: "12px",
+    color: "#878787",
+  },
+  rightSection: {
+    display: "flex",
+    flexDirection: "column",
+  },
+  productInfo: {
+    backgroundColor: "white",
+    borderRadius: "20px",
+    padding: "40px",
+    boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
+  },
+  categoryBadge: {
+    display: "inline-block",
+    backgroundColor: "#e0f2fe",
+    color: "#2874f0",
+    padding: "8px 16px",
+    borderRadius: "8px",
+    fontSize: "13px",
+    fontWeight: "700",
+    textTransform: "uppercase",
+    letterSpacing: "0.5px",
+    marginBottom: "16px",
+  },
+  productTitle: {
+    fontSize: "32px",
+    fontWeight: "700",
+    color: "#212121",
+    marginBottom: "16px",
+    lineHeight: "1.3",
+  },
+  starsContainer: {
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+    marginBottom: "24px",
+    paddingBottom: "24px",
+    borderBottom: "1px solid #f0f0f0",
+  },
+  ratingValue: {
+    fontSize: "16px",
+    fontWeight: "700",
+    color: "#212121",
+    marginLeft: "4px",
+  },
+  ratingCount: {
+    fontSize: "14px",
+    color: "#878787",
+  },
+  priceSection: {
+    marginBottom: "28px",
+  },
+  priceWrapper: {
+    display: "flex",
+    alignItems: "center",
+    gap: "16px",
+    marginBottom: "8px",
+  },
+  currentPrice: {
+    fontSize: "40px",
+    fontWeight: "800",
+    color: "#212121",
+  },
+  originalPrice: {
+    fontSize: "20px",
+    color: "#878787",
+    textDecoration: "line-through",
+  },
+  discountBadge: {
+    backgroundColor: "#dcfce7",
+    color: "#166534",
+    padding: "6px 12px",
+    borderRadius: "8px",
+    fontSize: "14px",
+    fontWeight: "700",
+  },
+  taxInfo: {
+    fontSize: "14px",
+    color: "#22c55e",
+    fontWeight: "600",
+  },
+  offersSection: {
+    background: "linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)",
+    border: "2px solid #22c55e",
+    borderRadius: "16px",
+    padding: "24px",
+    marginBottom: "28px",
+  },
+  offersTitle: {
+    fontSize: "18px",
+    fontWeight: "700",
+    color: "#166534",
+    marginBottom: "16px",
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+  },
+  offersList: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "12px",
+  },
+  offerItem: {
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+    fontSize: "15px",
+    color: "#166534",
+    fontWeight: "500",
+  },
+  description: {
+    marginBottom: "32px",
+  },
+  descriptionTitle: {
+    fontSize: "20px",
+    fontWeight: "700",
+    color: "#212121",
+    marginBottom: "12px",
+  },
+  descriptionText: {
+    fontSize: "15px",
+    color: "#64748b",
+    lineHeight: "1.8",
+  },
+  actionButtons: {
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: "16px",
+  },
+  addToCartBtn: {
+    backgroundColor: "#facc15",
+    color: "#000",
+    border: "none",
+    padding: "18px",
+    borderRadius: "12px",
+    fontSize: "16px",
+    fontWeight: "700",
+    cursor: "pointer",
+    transition: "all 0.2s",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "10px",
+    boxShadow: "0 4px 16px rgba(250, 204, 21, 0.3)",
+  },
+  buyNowBtn: {
+    background: "linear-gradient(135deg, #f97316 0%, #ea580c 100%)",
+    color: "white",
+    border: "none",
+    padding: "18px",
+    borderRadius: "12px",
+    fontSize: "16px",
+    fontWeight: "700",
+    cursor: "pointer",
+    transition: "all 0.2s",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "10px",
+    boxShadow: "0 4px 16px rgba(249, 115, 22, 0.3)",
+  },
+  reviewsSection: {
+    backgroundColor: "white",
+    borderRadius: "20px",
+    padding: "40px",
+    boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
+  },
+  reviewsTitle: {
+    fontSize: "28px",
+    fontWeight: "700",
+    color: "#212121",
+    marginBottom: "32px",
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+  },
+  reviewsGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+    gap: "20px",
+  },
+  reviewCard: {
+    backgroundColor: "#f8fafc",
+    padding: "24px",
+    borderRadius: "16px",
+    border: "1px solid #e2e8f0",
+    transition: "all 0.2s",
+  },
+  reviewHeader: {
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+    marginBottom: "12px",
+  },
+  reviewRating: {
+    backgroundColor: "#22c55e",
+    color: "white",
+    padding: "6px 12px",
+    borderRadius: "8px",
+    fontSize: "14px",
+    fontWeight: "700",
+    display: "flex",
+    alignItems: "center",
+    gap: "4px",
+  },
+  reviewTitle: {
+    fontSize: "16px",
+    fontWeight: "600",
+    color: "#212121",
+  },
+  reviewText: {
+    fontSize: "14px",
+    color: "#64748b",
+    lineHeight: "1.6",
+    marginBottom: "16px",
+  },
+  reviewFooter: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingTop: "12px",
+    borderTop: "1px solid #e2e8f0",
+  },
+  reviewAuthor: {
+    fontSize: "13px",
+    fontWeight: "600",
+    color: "#212121",
+  },
+  reviewDate: {
+    fontSize: "12px",
+    color: "#94a3b8",
+  },
+};
