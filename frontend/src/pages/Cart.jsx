@@ -1,48 +1,19 @@
 import { useCart } from "../context/CartContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   ShoppingBag,
   Trash2,
   ArrowLeft,
-  MessageCircle,
   Tag,
   TrendingUp,
   Package,
 } from "lucide-react";
 import Navbar from "../components/Navbar";
-import API from "../services/api";
 import "../styles/cart.css";
 
 export default function Cart() {
   const { cart, removeFromCart, totalPrice } = useCart();
-
-  const placeOrder = async () => {
-    if (cart.length === 0) return;
-
-    await API.post("/orders", {
-      products: cart.map((item) => ({
-        name: item.name,
-        price: item.price,
-        quantity: 1,
-      })),
-      totalAmount: totalPrice,
-    });
-
-    const phoneNumber = "917006502449";
-    let message = "🛍️ *New Order - Dream Gadgets*\n\n";
-
-    cart.forEach((item, index) => {
-      message += `${index + 1}. ${item.name} - ₹${item.price}\n`;
-    });
-
-    message += `\n💰 *Total: ₹${totalPrice}*\n`;
-    message += "\n📍 Please confirm availability & payment.";
-
-    window.open(
-      `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`,
-      "_blank"
-    );
-  };
+  const navigate = useNavigate();
 
   const savings = Math.floor(totalPrice * 0.23);
 
@@ -59,7 +30,7 @@ export default function Cart() {
         </div>
 
         <div style={styles.content} className="cart-content">
-          {/* LEFT */}
+          {/* LEFT COLUMN */}
           <div style={styles.leftColumn}>
             <div style={styles.cartHeader}>
               <div style={styles.headerLeft}>
@@ -89,7 +60,8 @@ export default function Cart() {
                   Add some amazing products to your cart
                 </p>
                 <Link to="/" style={styles.shopButton}>
-                  <Package size={20} /> Start Shopping
+                  <Package size={20} />
+                  <span>Start Shopping</span>
                 </Link>
               </div>
             ) : (
@@ -111,7 +83,11 @@ export default function Cart() {
                       className="cart-item"
                     >
                       <div style={styles.itemImage}>
-                        <img src={imageSrc} alt={p.name} style={styles.image} />
+                        <img
+                          src={imageSrc}
+                          alt={p.name}
+                          style={styles.image}
+                        />
                       </div>
 
                       <div style={styles.itemDetails}>
@@ -134,7 +110,8 @@ export default function Cart() {
                         onClick={() => removeFromCart(p._id)}
                         style={styles.removeButton}
                       >
-                        <Trash2 size={18} /> Remove
+                        <Trash2 size={18} />
+                        Remove
                       </button>
                     </div>
                   );
@@ -143,7 +120,7 @@ export default function Cart() {
             )}
           </div>
 
-          {/* RIGHT */}
+          {/* RIGHT COLUMN */}
           {cart.length > 0 && (
             <div style={styles.rightColumn} className="cart-summary">
               <div style={styles.summaryCard}>
@@ -171,9 +148,17 @@ export default function Cart() {
                   <span style={styles.totalValue}>₹{totalPrice}</span>
                 </div>
 
-                <button onClick={placeOrder} style={styles.checkoutButton}>
-                  <MessageCircle size={20} /> Place Order via WhatsApp
+                <button
+                  style={styles.checkoutButton}
+                  onClick={() => navigate("/checkout")}
+                >
+                  Proceed to Checkout
                 </button>
+
+                <div style={styles.savingsInfo}>
+                  <Tag size={18} />
+                  <span>You will save ₹{savings} on this order</span>
+                </div>
               </div>
             </div>
           )}
