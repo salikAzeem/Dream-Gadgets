@@ -47,7 +47,7 @@ export default function ProductDetail() {
           />
         ))}
         <span style={styles.ratingValue}>4.0</span>
-        <span style={styles.ratingCount}>(120 Ratings & 34 Reviews)</span>
+        <span style={styles.ratingCount}>(600 Ratings & 34 Reviews)</span>
       </div>
     );
   };
@@ -111,7 +111,7 @@ export default function ProductDetail() {
                 <RotateCcw size={24} style={{ color: "#f59e0b" }} />
                 <div>
                   <div style={styles.featureTitle}>Easy Returns</div>
-                  <div style={styles.featureText}>7 day replacement</div>
+                  <div style={styles.featureText}>No replacement</div>
                 </div>
               </div>
             </div>
@@ -146,15 +146,15 @@ export default function ProductDetail() {
                   </div>
                   <div style={styles.offerItem}>
                     <Shield size={18} style={{ color: "#22c55e" }} />
-                    <span>Cash on Delivery Available</span>
+                    <span>Authentic Product</span>
                   </div>
                   <div style={styles.offerItem}>
                     <RotateCcw size={18} style={{ color: "#22c55e" }} />
-                    <span>Easy 7-day Replacement Policy</span>
+                    <span>Easy Replacement Policy</span>
                   </div>
                   <div style={styles.offerItem}>
                     <Award size={18} style={{ color: "#22c55e" }} />
-                    <span>1 Year Warranty on all products</span>
+                    <span>No Warranty on products</span>
                   </div>
                 </div>
               </div>

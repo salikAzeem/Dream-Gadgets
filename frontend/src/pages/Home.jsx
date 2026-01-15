@@ -11,7 +11,7 @@ export default function Home() {
 
   const categories = [
     { name: "All", icon: "📱" },
-    { name: "Phone", icon: "📱" },
+    { name: "New Phone", icon: "📱" },
     { name: "Used Phone", icon: "📱" },
     { name: "Phone Cover", icon: "🛡️" },
     { name: "Earbuds", icon: "🎧" },
@@ -58,7 +58,7 @@ export default function Home() {
               <div style={styles.statItem}>
                 <TrendingUp size={20} style={{ color: "#22c55e" }} />
                 <div>
-                  <div style={styles.statValue}>500+</div>
+                  <div style={styles.statValue}>200+</div>
                   <div style={styles.statLabel}>Products</div>
                 </div>
               </div>

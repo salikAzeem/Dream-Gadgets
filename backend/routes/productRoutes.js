@@ -39,6 +39,20 @@ router.post("/", auth, upload.single("image"), async (req, res) => {
     res.status(500).json({ message: "Product upload failed" });
   }
 });
+router.put("/:id", async (req, res) => {
+  try {
+    const updatedProduct = await Product.findByIdAndUpdate(
+      req.params.id,
+      { $set: req.body },
+      { new: true }
+    );
+
+    res.json(updatedProduct);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 
 /**
  * GET ALL PRODUCTS (PUBLIC)

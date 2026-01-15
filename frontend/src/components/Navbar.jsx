@@ -14,11 +14,15 @@ import {
 } from "lucide-react";
 
 const categories = [
-  "Mobiles",
-  "Laptops",
-  "Headphones",
-  "Smart Watches",
-  "Accessories",
+  "New Phone",
+  "Used Phone",
+  "Phone Cover",
+  "Earbuds",
+  "Smart Watch",
+  "Charger",
+  "Cable",
+  "Screen Guard",
+  "Other",
 ];
 
 export default function Navbar() {
@@ -50,7 +54,7 @@ export default function Navbar() {
     <header style={{ ...styles.header, ...(dark && styles.darkHeader) }}>
       {/* TOP BAR */}
       <div style={{ ...styles.topBar, ...(dark && styles.darkTopBar) }}>
-        Premium Gadgets at Unbeatable Prices
+        Dream Gadgets at Unbeatable Prices
       </div>
 
       {/* MAIN NAV */}

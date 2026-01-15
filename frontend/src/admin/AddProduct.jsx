@@ -2,7 +2,7 @@ import { useState } from "react";
 import API from "../services/api";
 
 const CATEGORIES = [
-  "Phone",
+  "New Phone",
   "Used Phone",
   "Phone Cover",
   "Earbuds",
