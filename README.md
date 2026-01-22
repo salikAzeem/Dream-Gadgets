@@ -2,7 +2,6 @@
 
 Dream Gadgets is a full-stack e-commerce web application designed to provide a seamless online shopping experience for smart gadgets. The platform focuses on modern UI/UX, efficient product browsing, and a scalable architecture inspired by real-world e-commerce systems.
 
-This project was developed as part of an industry-oriented academic seminar (CA-1) and demonstrates practical full-stack development skills.
 
 🚀 Features
 
