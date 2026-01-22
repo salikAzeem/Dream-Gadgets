@@ -21,10 +21,10 @@ JavaScript (ES6+)
 
 Backend
 Node.js
-Express.js (or Laravel – update as per your project)
+Express.js 
 
 Database
-MongoDB (or MySQL)
+MongoDB 
 
 Tools & Services
 Git & GitHub
