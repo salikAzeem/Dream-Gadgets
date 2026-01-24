@@ -130,7 +130,6 @@ export default function Signup() {
                 <User size={20} style={styles.inputIcon} />
                 <input
                   type="text"
-                  placeholder="Name"
                   value={formData.fullName}
                   onChange={(e) =>
                     setFormData({ ...formData, fullName: e.target.value })
@@ -148,7 +147,6 @@ export default function Signup() {
                 <Mail size={20} style={styles.inputIcon} />
                 <input
                   type="email"
-                  placeholder="you@example.com"
                   value={formData.email}
                   onChange={(e) =>
                     setFormData({ ...formData, email: e.target.value })
@@ -173,7 +171,6 @@ export default function Signup() {
                 />
                 <button
                   type="button"
-                  placeholder="password"
                   onClick={() => setShowPassword(!showPassword)}
                   style={styles.toggleButton}
                 >
@@ -201,7 +198,6 @@ export default function Signup() {
                 />
                 <button
                   type="button"
-                  placeholder="confirm password"
                   onClick={() =>
                     setShowConfirmPassword(!showConfirmPassword)
                   }
