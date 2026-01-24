@@ -480,3 +480,44 @@ const styles = {
     fontWeight: "600",
   },
 };
+// 📱 MOBILE RESPONSIVE PATCH
+const mobile = window.innerWidth <= 768;
+
+if (mobile) {
+  styles.container = {
+    display: "flex",
+    flexDirection: "column",
+    minHeight: "100vh",
+  };
+
+  styles.leftSection = {
+    ...styles.leftSection,
+    padding: "30px 20px",
+    minHeight: "220px",
+  };
+
+  styles.logoText = {
+    ...styles.logoText,
+    fontSize: "28px",
+  };
+
+  styles.features = {
+    display: "none", // hide left features on mobile
+  };
+
+  styles.rightSection = {
+    ...styles.rightSection,
+    padding: "20px",
+  };
+
+  styles.formTitle = {
+    ...styles.formTitle,
+    fontSize: "26px",
+  };
+
+  styles.submitButton = {
+    ...styles.submitButton,
+    padding: "14px",
+    fontSize: "15px",
+  };
+}

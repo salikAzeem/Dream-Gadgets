@@ -49,7 +49,7 @@ export default function Checkout() {
     message += `\n💰 *Total:* ₹${totalPrice}`;
 
     window.open(
-      `https://wa.me/917006502449?text=${encodeURIComponent(message)}`,
+      `https://wa.me/919797001696?text=${encodeURIComponent(message)}`,
       "_blank"
     );
 
