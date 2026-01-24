@@ -1,8 +1,9 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 const AuthContext = createContext(null);
-
 export const useAuth = () => useContext(AuthContext);
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -15,8 +16,9 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
+  // LOGIN
   const signIn = async (email, password) => {
-    const res = await fetch("http://localhost:5000/api/auth/login", {
+    const res = await fetch(`${API_URL}/api/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
@@ -30,8 +32,9 @@ export const AuthProvider = ({ children }) => {
     setUser(data.user);
   };
 
+  // SIGNUP
   const signUp = async (name, email, password) => {
-    const res = await fetch("http://localhost:5000/api/auth/signup", {
+    const res = await fetch(`${API_URL}/api/auth/signup`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, email, password }),
@@ -40,7 +43,6 @@ export const AuthProvider = ({ children }) => {
     const data = await res.json();
     if (!res.ok) throw new Error(data.message);
 
-    // ❌ DO NOT AUTO LOGIN AFTER SIGNUP
     return true;
   };
 

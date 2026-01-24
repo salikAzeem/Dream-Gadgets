@@ -1,17 +1,28 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Mail, Lock, Eye, EyeOff, User, Sparkles, ArrowRight, CheckCircle } from "lucide-react";
+import {
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  User,
+  Sparkles,
+  ArrowRight,
+  CheckCircle,
+} from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 
 export default function Signup() {
   const navigate = useNavigate();
   const { signUp } = useAuth();
+
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -34,6 +45,7 @@ export default function Signup() {
     setPasswordStrength(calculatePasswordStrength(value));
   };
 
+  // 🔥 THIS IS THE ONLY REAL FIX
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -51,10 +63,15 @@ export default function Signup() {
     setLoading(true);
 
     try {
-      await signUp(formData.email, formData.password);
-      navigate("/");
+      await signUp(
+        formData.fullName,   // 👈 name
+        formData.email,      // 👈 email
+        formData.password    // 👈 password
+      );
+
+      navigate("/login"); // after signup go to login
     } catch (err) {
-      setError(err.message || "Failed to create account. Please try again.");
+      setError(err.message || "Failed to create account.");
     } finally {
       setLoading(false);
     }
@@ -78,26 +95,18 @@ export default function Signup() {
         </div>
 
         <div style={styles.features}>
-          <div style={styles.featureItem}>
-            <CheckCircle size={24} style={{ color: "#facc15" }} />
-            <span>Exclusive member deals</span>
-          </div>
-          <div style={styles.featureItem}>
-            <CheckCircle size={24} style={{ color: "#facc15" }} />
-            <span>Fast checkout process</span>
-          </div>
-          <div style={styles.featureItem}>
-            <CheckCircle size={24} style={{ color: "#facc15" }} />
-            <span>Track your orders</span>
-          </div>
-          <div style={styles.featureItem}>
-            <CheckCircle size={24} style={{ color: "#facc15" }} />
-            <span>Personalized recommendations</span>
-          </div>
-          <div style={styles.featureItem}>
-            <CheckCircle size={24} style={{ color: "#facc15" }} />
-            <span>Priority customer support</span>
-          </div>
+          {[
+            "Exclusive member deals",
+            "Fast checkout process",
+            "Track your orders",
+            "Personalized recommendations",
+            "Priority customer support",
+          ].map((text) => (
+            <div key={text} style={styles.featureItem}>
+              <CheckCircle size={24} style={{ color: "#facc15" }} />
+              <span>{text}</span>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -114,13 +123,14 @@ export default function Signup() {
           {error && <div style={styles.errorBanner}>{error}</div>}
 
           <form onSubmit={handleSubmit} style={styles.form}>
+            {/* FULL NAME */}
             <div style={styles.formGroup}>
               <label style={styles.label}>Full Name</label>
               <div style={styles.inputWrapper}>
                 <User size={20} style={styles.inputIcon} />
                 <input
                   type="text"
-                  placeholder="John Doe"
+                  placeholder="Name"
                   value={formData.fullName}
                   onChange={(e) =>
                     setFormData({ ...formData, fullName: e.target.value })
@@ -131,8 +141,9 @@ export default function Signup() {
               </div>
             </div>
 
+            {/* EMAIL */}
             <div style={styles.formGroup}>
-              <label style={styles.label}>Email Address</label>
+              <label style={styles.label}>Email</label>
               <div style={styles.inputWrapper}>
                 <Mail size={20} style={styles.inputIcon} />
                 <input
@@ -148,13 +159,13 @@ export default function Signup() {
               </div>
             </div>
 
+            {/* PASSWORD */}
             <div style={styles.formGroup}>
               <label style={styles.label}>Password</label>
               <div style={styles.inputWrapper}>
                 <Lock size={20} style={styles.inputIcon} />
                 <input
                   type={showPassword ? "text" : "password"}
-                  placeholder="Create a strong password"
                   value={formData.password}
                   onChange={handlePasswordChange}
                   required
@@ -162,60 +173,38 @@ export default function Signup() {
                 />
                 <button
                   type="button"
+                  placeholder="password"
                   onClick={() => setShowPassword(!showPassword)}
                   style={styles.toggleButton}
                 >
-                  {showPassword ? (
-                    <EyeOff size={20} />
-                  ) : (
-                    <Eye size={20} />
-                  )}
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
-              {formData.password && (
-                <div style={styles.strengthContainer}>
-                  <div style={styles.strengthBars}>
-                    {[...Array(5)].map((_, i) => (
-                      <div
-                        key={i}
-                        style={{
-                          ...styles.strengthBar,
-                          backgroundColor:
-                            i < passwordStrength
-                              ? getPasswordStrengthColor()
-                              : "#e2e8f0",
-                        }}
-                      />
-                    ))}
-                  </div>
-                  <span style={styles.strengthText}>
-                    {passwordStrength < 2
-                      ? "Weak"
-                      : passwordStrength < 4
-                      ? "Medium"
-                      : "Strong"}
-                  </span>
-                </div>
-              )}
             </div>
 
+            {/* CONFIRM */}
             <div style={styles.formGroup}>
               <label style={styles.label}>Confirm Password</label>
               <div style={styles.inputWrapper}>
                 <Lock size={20} style={styles.inputIcon} />
                 <input
                   type={showConfirmPassword ? "text" : "password"}
-                  placeholder="Confirm your password"
                   value={formData.confirmPassword}
                   onChange={(e) =>
-                    setFormData({ ...formData, confirmPassword: e.target.value })
+                    setFormData({
+                      ...formData,
+                      confirmPassword: e.target.value,
+                    })
                   }
                   required
                   style={styles.input}
                 />
                 <button
                   type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  placeholder="confirm password"
+                  onClick={() =>
+                    setShowConfirmPassword(!showConfirmPassword)
+                  }
                   style={styles.toggleButton}
                 >
                   {showConfirmPassword ? (
@@ -227,60 +216,20 @@ export default function Signup() {
               </div>
             </div>
 
-            <label style={styles.termsLabel}>
-              <input type="checkbox" required style={styles.checkbox} />
-              <span>
-                I agree to the{" "}
-                <a href="#" style={styles.termsLink}>
-                  Terms & Conditions
-                </a>{" "}
-                and{" "}
-                <a href="#" style={styles.termsLink}>
-                  Privacy Policy
-                </a>
-              </span>
-            </label>
-
-            <button
-              type="submit"
-              disabled={loading}
-              style={{
-                ...styles.submitButton,
-                opacity: loading ? 0.7 : 1,
-                cursor: loading ? "not-allowed" : "pointer",
-              }}
-            >
-              {loading ? (
-                <>
-                  <div style={styles.buttonSpinner}></div>
-                  <span>Creating Account...</span>
-                </>
-              ) : (
-                <>
-                  <span>Create Account</span>
-                  <ArrowRight size={20} />
-                </>
-              )}
+            <button type="submit" disabled={loading} style={styles.submitButton}>
+              {loading ? "Creating..." : "Create Account"}
             </button>
           </form>
 
-          <div style={styles.divider}>
-            <span style={styles.dividerText}>Already have an account?</span>
-          </div>
-
           <Link to="/login" style={styles.loginLink}>
-            Sign in here
+            Already have an account? Login
           </Link>
-
-          <div style={styles.securityBadge}>
-            <span>🔒</span>
-            <span>Your data is encrypted and secure</span>
-          </div>
         </div>
       </div>
     </div>
   );
 }
+
 
 const styles = {
   container: {
