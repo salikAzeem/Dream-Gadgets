@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
-import { MapPin, Phone, User, MessageCircle } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 import Navbar from "../components/Navbar";
 import API from "../services/api";
 
@@ -37,16 +37,24 @@ export default function Checkout() {
       totalAmount: totalPrice,
     });
 
-    let message = `🛍️ *New Order - Dream Gadgets*\n\n`;
-    message += `👤 *Name:* ${form.name}\n`;
-    message += `📞 *Phone:* ${form.phone}\n`;
-    message += `📍 *Address:* ${form.address}, ${form.city} - ${form.pincode}\n\n`;
+    // ---------- PROFESSIONAL WHATSAPP MESSAGE ----------
+    const orderId = Date.now().toString().slice(-6);
+
+    let message = `🟦 *DREAM GADGETS ORDER*\n`;
+    message += `🆔 Order ID: DG-${orderId}\n\n`;
+    message += `👤 Name: ${form.name}\n`;
+    message += `📞 Phone: ${form.phone}\n`;
+    message += `📍 Address: ${form.address}, ${form.city} - ${form.pincode}\n\n`;
+    message += `🧾 *Items:*\n\n`;
 
     cart.forEach((item, i) => {
-      message += `${i + 1}. ${item.name} - ₹${item.price}\n`;
+      message += `${i + 1}. ${item.name}\n`;
+      message += `₹${item.price}\n`;
+      message += `🔗 https://dream-gadgets-1.onrender.com/product/${item._id}\n\n`;
     });
 
-    message += `\n💰 *Total:* ₹${totalPrice}`;
+    message += `💰 *Total:* ₹${totalPrice}\n\n`;
+    message += `🌐 https://dream-gadgets-1.onrender.com`;
 
     window.open(
       `https://wa.me/919797001696?text=${encodeURIComponent(message)}`,
@@ -69,7 +77,6 @@ export default function Checkout() {
       <div style={styles.container}>
         <div style={styles.left}>
           <h2>Delivery Details</h2>
-
           <input name="name" placeholder="Full Name" onChange={handleChange} />
           <input name="phone" placeholder="Phone Number" onChange={handleChange} />
           <input name="address" placeholder="Full Address" onChange={handleChange} />
@@ -100,6 +107,7 @@ export default function Checkout() {
     </div>
   );
 }
+
 const styles = {
   page: { background: "#f8fafc", minHeight: "100vh" },
   container: {
@@ -150,3 +158,26 @@ const styles = {
     gap: "8px",
   },
 };
+// 📱 MOBILE RESPONSIVE
+if (window.innerWidth <= 768) {
+  styles.container = {
+    ...styles.container,
+    gridTemplateColumns: "1fr",
+  };
+
+  styles.left = {
+    ...styles.left,
+    padding: "20px",
+  };
+
+  styles.right = {
+    ...styles.right,
+    padding: "20px",
+  };
+
+  styles.btn = {
+    ...styles.btn,
+    fontSize: "15px",
+    padding: "14px",
+  };
+}
