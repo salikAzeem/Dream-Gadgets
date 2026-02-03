@@ -38,8 +38,8 @@ export default function Footer() {
         <div style={styles.col}>
           <h4 style={styles.heading}>Contact</h4>
           <p style={styles.text}><Phone size={14} /> +91 9797001696</p>
-          <p style={styles.text}><Mail size={14} /> support@dreamgadgets.com</p>
-          <p style={styles.text}><MapPin size={14} /> India</p>
+          <p style={styles.text}><Mail size={14} /> parvaizahmadbhat128@gmail.com</p>
+          <p style={styles.text}><MapPin size={14} /> Old Bus Stand, Maintown Budgam,India</p>
         </div>
       </div>
 
