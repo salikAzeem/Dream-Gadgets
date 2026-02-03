@@ -9,3 +9,16 @@ body {
   background-color: #f1f3f6;
   color: #111;
 }
+.legal {
+  max-width: 900px;
+  margin: 60px auto;
+  padding: 24px;
+  font-size: 16px;
+  line-height: 1.8;
+  color: #222;
+}
+
+.legal h1 {
+  margin-bottom: 20px;
+  font-size: 28px;
+}
