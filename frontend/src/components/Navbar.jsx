@@ -28,7 +28,7 @@ const categories = [
 
 export default function Navbar() {
   const { cart } = useCart();
-  const { isAuthenticated, signOut } = useAuth();
+  const { isAuthenticated, signOut, user } = useAuth(); // 🔹 ADDED user
   const navigate = useNavigate();
 
   const [query, setQuery] = useState("");
@@ -133,9 +133,15 @@ export default function Navbar() {
               </Link>
             </>
           ) : (
-            <button onClick={signOut} style={styles.logoutBtn}>
-              Logout
-            </button>
+            // 🔹 UPDATED BLOCK
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <span style={{ fontWeight: 600 }}>
+                Welcome, {user?.name || "User"}
+              </span>
+              <button onClick={signOut} style={styles.logoutBtn}>
+                Logout
+              </button>
+            </div>
           )}
 
           {/* 🛒 CART */}
